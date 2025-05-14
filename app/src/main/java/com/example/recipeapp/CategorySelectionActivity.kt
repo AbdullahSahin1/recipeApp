@@ -37,7 +37,9 @@ class CategorySelectionActivity : AppCompatActivity() {
             Category(3, "Tatlılar", R.drawable.dessert),
             Category(4, "Salatalar", R.drawable.salad),
             Category(5, "İçecekler", R.drawable.drinks),
-            Category(6, "Kahvaltılıklar", R.drawable.breakfast)
+            Category(6, "Kahvaltılıklar", R.drawable.breakfast),
+            Category(7, "Atıştırmalıklar", R.drawable.snacks),
+            Category(8, "Soğuk İçecekler", R.drawable.beverages)
         )
         adapter.submitList(categories)
     }
