@@ -17,9 +17,20 @@ class CategorySelectionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_category_selection)
 
-        recyclerView = findViewById(R.id.categoryRecyclerView)
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
+        setupRecyclerView()
+        loadCategories()
+    }
 
+    private fun setupRecyclerView() {
+        recyclerView = findViewById(R.id.categoriesRecyclerView)
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
+        adapter = CategoryAdapter { category ->
+            Toast.makeText(this, "${category.name} seçildi", Toast.LENGTH_SHORT).show()
+        }
+        recyclerView.adapter = adapter
+    }
+
+    private fun loadCategories() {
         val categories = listOf(
             Category(1, "Ana Yemekler", R.drawable.main_dish),
             Category(2, "Çorbalar", R.drawable.soup),
@@ -28,13 +39,6 @@ class CategorySelectionActivity : AppCompatActivity() {
             Category(5, "İçecekler", R.drawable.drinks),
             Category(6, "Kahvaltılıklar", R.drawable.breakfast)
         )
-
-        adapter = CategoryAdapter(categories) { category ->
-            // Kategori seçildiğinde yapılacak işlemler
-            Toast.makeText(this, "${category.name} seçildi", Toast.LENGTH_SHORT).show()
-            // Burada seçilen kategoriye göre yeni bir aktivite başlatabilirsiniz
-        }
-
-        recyclerView.adapter = adapter
+        adapter.submitList(categories)
     }
 } 

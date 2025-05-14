@@ -1,47 +1,79 @@
 package com.example.recipeapp
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.recipeapp.ui.theme.RecipeAppTheme
+import android.os.Handler
+import android.os.Looper
+import android.view.animation.AnimationUtils
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.button.MaterialButton
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var appLogoImageView: ImageView
+    private lateinit var welcomeTextView: TextView
+    private lateinit var descriptionTextView: TextView
+    private lateinit var startButton: MaterialButton
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            RecipeAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
-        }
+        setContentView(R.layout.activity_main)
+
+        initializeViews()
+        startAnimations()
+        setupClickListeners()
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    private fun initializeViews() {
+        appLogoImageView = findViewById(R.id.appLogoImageView)
+        welcomeTextView = findViewById(R.id.welcomeTextView)
+        descriptionTextView = findViewById(R.id.descriptionTextView)
+        startButton = findViewById(R.id.startButton)
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    RecipeAppTheme {
-        Greeting("Android")
+        // Başlangıçta görünmez yap
+        welcomeTextView.alpha = 0f
+        descriptionTextView.alpha = 0f
+        startButton.alpha = 0f
+    }
+
+    private fun startAnimations() {
+        // Logo animasyonu
+        val fadeIn = AnimationUtils.loadAnimation(this, android.R.anim.fade_in)
+        fadeIn.duration = 1000
+        appLogoImageView.startAnimation(fadeIn)
+
+        // Hoş geldiniz yazısı animasyonu
+        Handler(Looper.getMainLooper()).postDelayed({
+            welcomeTextView.animate()
+                .alpha(1f)
+                .setDuration(1000)
+                .start()
+        }, 500)
+
+        // Açıklama yazısı animasyonu
+        Handler(Looper.getMainLooper()).postDelayed({
+            descriptionTextView.animate()
+                .alpha(1f)
+                .setDuration(1000)
+                .start()
+        }, 1000)
+
+        // Başla butonu animasyonu
+        Handler(Looper.getMainLooper()).postDelayed({
+            startButton.animate()
+                .alpha(1f)
+                .setDuration(1000)
+                .start()
+        }, 1500)
+    }
+
+    private fun setupClickListeners() {
+        startButton.setOnClickListener {
+            val intent = Intent(this, CategorySelectionActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }
     }
 }
